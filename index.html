@@ -11,6 +11,9 @@
   li {
     list-style-type: none;
   }
+  /* #choice {
+    justify-content: space-between;
+  } */
 
 </style>
   </head>
@@ -21,12 +24,26 @@
       const { Component } = React;
       const { render } = ReactDOM;
 
-      const Nav = ()=> {
-        console.log('here');
+      const Nav = ({ products, path })=> {
+        const links = [
+          {to: 'products', text:`Under 5 `},
+          {to: 'overFive', text:`5 and Over`}
+        ];
         return (
-          <div>
+          <nav>
             <h1 id='title'>Acme 5 - Over / Under</h1>
-          </div>
+            <div id='choice'>
+              {
+                links.map( (link, idx) => <Link className={ path.slice(1) === link.to ? 'selected': ''} key={ idx} to={ link.to }>{ link.text }</Link> )
+              }
+            </div>
+          </nav>
+        );
+      }
+
+      const OverFive = ({ products })=> {
+        return (
+          <h3>Write something Here</h3>
         );
       }
 
@@ -35,10 +52,10 @@
           <div>
             <h1>Products</h1>
             <ul>{
-              products.map( product=>{
+              products.map( (product, idx)=>{
                 return (
-                  <div>
-                    <li>{product.name}</li>
+                  <div key={product.id}>
+                    <li >{product.name}</li>
                     <li>{product.suggestedPrice +'.00'}</li>
                     <hr/ >
                   </div>
@@ -72,8 +89,9 @@
           const { products, offerings, companies} = this.state;
           return (
             <HashRouter>
+              <Route render={ ({ location })=> <Nav path={ location.pathname } products={ products } />} />
               <Switch>
-                <Route path='/nav' component={ Nav } />
+                <Route path='/nav' render={ () => <Products products={ products }/> } />
                 <Route path='/products' render={ () => <Products products={ products }/> } />
                 <Redirect to='/nav' />
 
