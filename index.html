@@ -11,9 +11,10 @@
   li {
     list-style-type: none;
   }
-  /* #choice {
-    justify-content: space-between;
-  } */
+   #choice {
+    display: flex;
+    justify-content: space-around;
+  }
 
 </style>
   </head>
@@ -26,7 +27,7 @@
 
       const Nav = ({ products, path })=> {
         const links = [
-          {to: 'products', text:`Under 5 `},
+          {to: 'products', text:`Under 5`},
           {to: 'overFive', text:`5 and Over`}
         ];
         return (
@@ -41,13 +42,23 @@
         );
       }
 
-      const OverFive = ({ products })=> {
+      const OverFive = ({ products, pr })=> {
         return (
           <h3>Write something Here</h3>
         );
       }
 
-      const Products = ({ products })=> {
+      const Products = ({ products, offerings, companies })=> {
+        const productIds = products.map( product => {
+          return product.id;
+        });
+        console.log('this is ', productIds);
+
+        const companyNames = companies.map( company => {
+          return company.name;
+        });
+        console.log('this is ', companyNames);
+
         return (
           <div>
             <h1>Products</h1>
@@ -91,8 +102,8 @@
             <HashRouter>
               <Route render={ ({ location })=> <Nav path={ location.pathname } products={ products } />} />
               <Switch>
-                <Route path='/nav' render={ () => <Products products={ products }/> } />
-                <Route path='/products' render={ () => <Products products={ products }/> } />
+                <Route path='/nav' render={ () => <Products products={ products } offerings={ offerings } companies={companies} /> } />
+                <Route path='/products' render={ () => <Products products={ products } offerings={ offerings } companies={companies} /> } />
                 <Redirect to='/nav' />
 
               </Switch>

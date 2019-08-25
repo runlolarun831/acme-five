@@ -6,7 +6,9 @@ Acme 5 - over/ under
 -5 and over + list length
 
 product name link
-w/???average price from offerings under name????
+and highest offering price of the product
+
+NOT THIS   w/???average price from offerings under name????
 
 click on product name link and list of offerings along w/ company name
 
