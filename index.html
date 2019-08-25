@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.0.1/react-router-dom.js"></script>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'/>
+<style>
+  li {
+    list-style-type: none;
+  }
+
+</style>
+  </head>
+  <body>
+    <div id="root">"root"</div>
+    <script type='text/babel'>
+      const { HashRouter, Switch, Link, Route, Redirect } = ReactRouterDOM;
+      const { Component } = React;
+      const { render } = ReactDOM;
+
+      const Nav = ()=> {
+        console.log('here');
+        return (
+          <div>
+            <h1 id='title'>Acme 5 - Over / Under</h1>
+          </div>
+        );
+      }
+
+      const Products = ({ products })=> {
+        return (
+          <div>
+            <h1>Products</h1>
+            <ul>{
+              products.map( product=>{
+                return (
+                  <div>
+                    <li>{product.name}</li>
+                    <li>{product.suggestedPrice +'.00'}</li>
+                    <hr/ >
+                  </div>
+                )
+              })
+            }</ul>
+          </div>
+        );
+        }
+
+      const API = 'https://acme-users-api-rev.herokuapp.com/api/'
+
+      class App extends Component{
+        constructor(){
+          super();
+          this.state = {
+            products: [],
+            offerings: [],
+            companies: []
+          };
+        }
+
+        componentDidMount(){
+          Promise.all(['products', 'offerings', 'companies'].map( group => axios.get(`${API}${ group }`)))
+            .then( responses => responses.map(response => response.data))
+            .then( ([ products, offerings, companies ])=> this.setState({ products, offerings, companies }));
+        }
+
+
+        render(){
+          const { products, offerings, companies} = this.state;
+          return (
+            <HashRouter>
+              <Switch>
+                <Route path='/nav' component={ Nav } />
+                <Route path='/products' render={ () => <Products products={ products }/> } />
+                <Redirect to='/nav' />
+
+              </Switch>
+            </HashRouter>
+          );
+        }
+      }
+
+      const root = document.querySelector('#root');
+      //render(React.createElement('hr'), root);
+      render(<App />, root)
+    </script>
+  </body>
+</html>
