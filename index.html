@@ -27,7 +27,7 @@
 
       const Nav = ({ products, path })=> {
         const links = [
-          {to: 'products', text:`Under 5`},
+          {to: 'underFive', text:`Under 5`},
           {to: 'overFive', text:`5 and Over`}
         ];
         return (
@@ -42,28 +42,41 @@
         );
       }
 
-      const OverFive = ({ products, pr })=> {
-        return (
-          <h3>Write something Here</h3>
-        );
-      }
-
-      const Products = ({ products, offerings, companies })=> {
-        const productIds = products.map( product => {
-          return product.id;
+      const OverFive = ({ products, offerings, companies })=> {
+        const productOver = products.filter( product => {
+          return product.suggestedPrice >= 5;
         });
-        console.log('this is ', productIds);
-
-        const companyNames = companies.map( company => {
-          return company.name;
-        });
-        console.log('this is ', companyNames);
+        console.log('this is pO', productOver);
 
         return (
           <div>
-            <h1>Products</h1>
+              <h1>Over</h1>
             <ul>{
-              products.map( (product, idx)=>{
+              productOver.map( (product, idx)=>{
+                return (
+                  <div key={product.id}>
+                    <li >{product.name}</li>
+                    <li>{product.suggestedPrice +'.00'}</li>
+                    <hr/ >
+                  </div>
+                )
+              })
+            }</ul>
+          </div>
+        );
+        }
+
+      const UnderFive = ({ products, offerings, companies })=> {
+        const productUnder = products.filter( product => {
+          return product.suggestedPrice < 5;
+        });
+        console.log('this is pU', productUnder);
+
+        return (
+          <div>
+            <h1>Under</h1>
+            <ul>{
+              productUnder.map( (product, idx)=>{
                 return (
                   <div key={product.id}>
                     <li >{product.name}</li>
@@ -102,9 +115,10 @@
             <HashRouter>
               <Route render={ ({ location })=> <Nav path={ location.pathname } products={ products } />} />
               <Switch>
-                <Route path='/nav' render={ () => <Products products={ products } offerings={ offerings } companies={companies} /> } />
-                <Route path='/products' render={ () => <Products products={ products } offerings={ offerings } companies={companies} /> } />
-                <Redirect to='/nav' />
+                <Route path='/nav' render={ () => <UnderFive products={ products } offerings={ offerings } companies={companies} /> } />
+                <Route path='/overFive' render={ () => <OverFive products={ products } offerings={ offerings } companies={companies} /> } />
+                <Route path='/underFive' render={ () => <UnderFive products={ products } offerings={ offerings } companies={companies} /> } />
+                <Redirect to='/underFive' />
 
               </Switch>
             </HashRouter>

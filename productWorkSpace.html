@@ -14,6 +14,9 @@
 
       const [companies, products, offerings ] = responses.map( response => response.data);
 
+      //looking for the highest offering price for each product
+      const highOfferPrice = products.map( product => product.id )
+      offerings.reduce((max, currVal) => ( max.price > currVal.price ) ?  max.price : currVal.price);
 
         } ;
         loadData();
