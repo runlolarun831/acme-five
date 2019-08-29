@@ -31,9 +31,16 @@
       const { render } = ReactDOM;
 
       const Nav = ({ products, path })=> {
+        const productOver = products.filter( product => {
+          return product.suggestedPrice >= 5;
+        });
+        const productUnder = products.filter( product => {
+          return product.suggestedPrice < 5;
+        });
+
         const links = [
-          {to: 'underFive', text:`Under 5`},
-          {to: 'overFive', text:`5 and Over`}
+          {to: 'underFive', text:`Under 5 (${productUnder.length})`},
+          {to: 'overFive', text:`5 and Over (${productOver.length})`}
         ];
         return (
           <nav>
@@ -47,7 +54,7 @@
         );
       }
 
-      const OverFive = ({ products, offerings, companies })=> {
+      const OverFive = ({ products, offerings, companies})=> {
         const productOver = products.filter( product => {
           return product.suggestedPrice >= 5;
         });
@@ -60,22 +67,35 @@
               productOver.map( (product, idx)=>{
                 return (
                   <div key={product.id}>
-                    <li >{product.name}</li>
+                    <Link to={`products/${product.id}`}>{product.name}</Link>
                     <li>{product.suggestedPrice +'.00'}</li>
                     <hr/ >
                   </div>
                 )
               })
             }</ul>
+
           </div>
         );
         }
 
       const UnderFive = ({ products, offerings, companies })=> {
         const productUnder = products.filter( product => {
-          return product.suggestedPrice < 5;
+          return product.suggestedPrice >= 5;
         });
-        console.log('this is pU', productUnder);
+        console.log('this is pO', productUnder);
+
+        // const productUnder = [...products].filter( product => {
+        //   let productOffers = [...offerings].filter( offer => {
+        //     if(product.suggestedPrice < 5 && product.id === offer.productId) {
+        //       console.log('suggP ',product.suggestedPrice,  ' match ', offer.productId  );
+        //     }
+        //     return product.suggestedPrice < 5 && product.id === offer.productId;
+        //   })
+        // })
+        // return productUnder;
+
+        // console.log('productUnder',productUnder);
 
         return (
           <div>
@@ -84,16 +104,36 @@
               productUnder.map( (product, idx)=>{
                 return (
                   <div key={product.id}>
-                    <li >{product.name}</li>
+                    <Link to={`products/${product.id}`}>{product.name}</Link>
                     <li>{product.suggestedPrice +'.00'}</li>
                     <hr/ >
                   </div>
                 )
               })
             }</ul>
+            <Route path='/underFive/:id' component={ UnderFive} />
           </div>
         );
-        }
+        };
+//Im putting Under-Five below to make sense of everything...
+//why create a class if I already passed offerings above?
+      // class Under-Five extends Component{
+      //   constructor(){
+      //     super();
+      //     this.state = {
+      //       offerings: []
+      //     };
+      //   }
+      //   async componentDidMount() {
+      //     const response = await axios.get('https://acme-users-api-rev.herokuapp.com/api/offerings')
+      //     this.setState( { offerings: response.data })
+      //   }
+      //  /// stopping here
+
+      //   }
+
+
+
 
       const API = 'https://acme-users-api-rev.herokuapp.com/api/'
 
