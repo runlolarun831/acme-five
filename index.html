@@ -98,6 +98,12 @@
               let offerObj ={}
             if(product.id === offer.productId) {
               offerObj.price = offer.price;
+              let offerComps = companies.forEach( company =>{
+                if(company.id === offer.companyId){
+                offerObj.company = company.name;
+                }
+              }
+             )
               offersArr.push(offerObj);
             }
 
