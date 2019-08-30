@@ -87,21 +87,26 @@
 
         const productUnder = products.filter( product => {
           let newObj ={};
-          let productOffers = offerings.filter( offer => {
-            if(product.suggestedPrice < 5 && product.id === offer.productId) {
-              newObj.id = product.id;
-               newObj.name = product.name;
-               newObj.suggestedPrice = product.suggestedPrice;
-               newObj.offer = offer.price;
-
-              //console.log('suggP ',product.suggestedPrice,  ' match ', offer.productId  );
-              //console.log(product.id, ' === ', offer.productId);
-              console.log(newObj);
-              return offer;
+          //newObj.offers = [];
+          if (product.suggestedPrice < 5 ){
+            newObj.id = product.id;
+            newObj.name = product.name;
+            newObj.suggestedPrice = product.suggestedPrice;
+            //console.log(newObj);
+            const offersArr=[];
+            let productOffers = offerings.forEach( offer => {
+              let offerObj ={}
+            if(product.id === offer.productId) {
+              offerObj.price = offer.price;
+              offersArr.push(offerObj);
             }
-            return product.suggestedPrice < 5 && product.id === offer.productId;
-          })
-        })
+
+          });
+          newObj.offers = offersArr;
+          console.log(newObj);
+          return newObj;
+        }
+      })
         return productUnder;
 
         console.log('productUnder', productUnder);
